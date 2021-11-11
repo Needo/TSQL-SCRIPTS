@@ -1,0 +1,25 @@
+There are 3 types of temp tables in the SQL Server
+1- Table variable declare with @Table
+
+DECLARE @Products AS TABLE (ProductID INT NOT NULL PRIMARY KEY, ProductName NVARCHAR(500) NOT NULL)
+
+This type of table is created in memory and visible only within the current batch. NOT VISIBLE OUTSIDE THE CURRENT BATCH SCOPE.
+ 
+2- Temp table created with single # symbol.
+
+CREATE #Products (ProductID INT NOT NULL PRIMARY KEY, ProductName NVARCHAR(500) NOT NULL)
+
+It can be created using Create keywork like shown above OR it can be created using SELECT INTO syntax as following.
+
+SELECT * INTO #Products FROM TableWithData --it crates a table on the fly and inserts the rows returned by select statement.
+
+This type of table is created in the tempDB and visible/accessible only within current session that means, its visible across batches but not outside the current session.
+In terms of SQL Server Management Studio every Query window is a new session. On session end automatically get dropped.
+
+3- Temp table created with double ## symbol
+
+CREATE ##Products (ProductID INT NOT NULL PRIMARY KEY, ProductName NVARCHAR(500) NOT NULL)
+
+like #table its also created in the tempDB but its visibility/scope with global that means, it can be seen/accessed from other sessions like permanent tables. That means these
+can be manipulated (insert, update, delete, drop) from any session. Like #2 these also automatically get dropped on session end that it was created from.
+
