@@ -23,3 +23,33 @@ CREATE ##Products (ProductID INT NOT NULL PRIMARY KEY, ProductName NVARCHAR(500)
 like #table its also created in the tempDB but its visibility/scope with global that means, it can be seen/accessed from other sessions like permanent tables. That means these
 can be manipulated (insert, update, delete, drop) from any session. Like #2 these also automatically get dropped on session end that it was created from.
 
+******************************************
+Dropping Temp Tables:
+
+-- Using OBJECT_ID
+-- Temp table
+IF OBJECT_ID(N'tempdb..#Products') IS NOT NULL
+BEGIN
+    DROP TABLE #LocalCustomer
+END
+GO
+
+-- Global temp table.
+IF OBJECT_ID(N'tempdb..##Products') IS NOT NULL
+BEGIN
+    DROP TABLE #LocalCustomer
+END
+GO
+
+-- Using tempdb.sys.tables
+
+IF EXISTS(SELECT [name] FROM tempdb.sys.tables WHERE [name] like '#Products%') -- Replace Products with your temp table name.
+BEGIN
+   DROP TABLE #Products;
+END;
+
+IF EXISTS(SELECT [name] FROM tempdb.sys.tables WHERE [name] like '##Products%') -- Replace Products with your temp table name.
+BEGIN
+   DROP TABLE ##Products;
+END;
+
